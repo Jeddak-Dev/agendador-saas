@@ -1,6 +1,7 @@
-from django.apps import AppConfig
+from django.shortcuts import render
 
+def inicio(request):
+    return render(request, 'inicio.html')
 
-class FormularioConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Formulario'
+def painel_admin(request):
+    return render(request, 'admin.html')
