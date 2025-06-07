@@ -14,25 +14,23 @@
     <!-- Logo da plataforma -->
     <header class="logo-container">
         <img src="/frontend//src/img/LOGO THARK.jpeg" alt="Logo da Plataforma" class="logo" />
-        <h1 class="logo-text">Regitro de CLientes</h1>
+        <h1 class="logo-text">Registro de Clientes</h1>
     </header>
     <!-- Formulário de login -->
   <main class="login-container">
     <section class="login-card fade-in">
       <h1>Bem-vindo</h1>
       <p class="subtitle">Faça login para continuar</p>
-        <p class="error-message" id="errorMessage" style="display: none;">Erro: CPF ou senha inválidos.</p>
-        <p class="success-message" id="successMessage" style="display: none;">Login realizado com sucesso!</p>
         <!-- Formulário de login -->
       <form class="login-form" id="loginForm">
         <div class="form-group">
           <label for="cpf">CPF</label>
-          <input type="text" id="cpf" name="cpf" placeholder="Insira seu CPF" required />
+          <input type="text" id="cpf" name="cpf" placeholder="Insira seu CPF" required autocomplete="username" />
         </div>
             
         <div class="form-group">
           <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" placeholder="Insira sua senha" required />
+          <input type="password" id="senha" name="senha" placeholder="Insira sua senha" required autocomplete="current-password" />
         </div>
 
         <div class="button-group">
@@ -44,6 +42,6 @@
   </main>
 
   <!-- JS com animações e interação -->
-  <script src="/frontend/js/script.js"></script>
+  <script src="/frontend/src/js/script.js"></script>
 </body>
 </html>

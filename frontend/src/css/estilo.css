@@ -15,6 +15,24 @@ body {
   color: #333;
 }
 
+/* Background Animation */
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: radial-gradient(circle at 20% 30%, #8f94fb33 0, transparent 70%),
+              radial-gradient(circle at 80% 70%, #4e54c833 0, transparent 70%);
+  animation: bgMove 8s infinite alternate;
+}
+
+@keyframes bgMove {
+  0% { background-position: 20% 30%, 80% 70%; }
+  100% { background-position: 30% 40%, 70% 60%; }
+}
+
 /* Container */
 .login-container {
   width: 100%;
@@ -107,4 +125,30 @@ input:focus {
 
 .btn-register:hover {
   background-color: #d5d5d5;
+}
+
+/* Logo */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(78, 84, 200, 0.15);
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
 }
