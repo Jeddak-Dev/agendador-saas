@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 
 
 def main():
@@ -20,6 +21,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+BASE_DIR = Path(__file__).resolve().parent
 
 TEMPLATES = [
     {
@@ -35,5 +37,6 @@ TEMPLATES = [
             ],
         },
     },
+]
 ]
 
