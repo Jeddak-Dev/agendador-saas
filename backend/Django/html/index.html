@@ -1,25 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Plataforma</title>
 
-    <!-- Link correto para o CSS externo -->
-    <link rel="stylesheet" href="/frontend/src/estilo.css">
+  <!-- Link para o CSS profissional -->
+  <link rel="stylesheet" href="/frontend/src/estilo.css" />
 </head>
 <body>
-    <div class="container">
-        <label for="login">Login:</label>
-        <input type="text" id="login" placeholder="Insira seu CPF">
+  <main class="login-container">
+    <section class="login-card">
+      <h1>Bem-vindo</h1>
+      <p class="subtitle">Faça login para continuar</p>
 
-        <label for="senha">Senha:</label>
-        <input type="password" name="senha" id="senha" placeholder="Insira sua senha">
+      <form class="login-form">
+        <div class="form-group">
+          <label for="cpf">CPF</label>
+          <input type="text" id="cpf" name="cpf" placeholder="Insira seu CPF" required />
+        </div>
 
-        <button id="btn-login">Login</button>
-        <button id="btn-registrar">Registrar-se</button>
-    </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Insira sua senha" required />
+        </div>
 
-    <script src="/frontend/js/script.js"></script>
-</body> 
+        <div class="button-group">
+          <button type="submit" class="btn btn-login">Login</button>
+          <button type="button" class="btn btn-register">Registrar-se</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/frontend/js/script.js"></script>
+</body>
 </html>
