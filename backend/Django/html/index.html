@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+
+    <!-- Link correto para o CSS externo -->
+    <link rel="stylesheet" href="/frontend/src/estilo.css">
 </head>
 <body>
-    <label for="login">Login:</label>
-    <input type="text" placeholder="Insira seu cpf">
-    <label for="senha">Senha:</label>
-    <input type="password" name="senha" id="senha" placeholder="insira sua senha">
+    <div class="container">
+        <label for="login">Login:</label>
+        <input type="text" id="login" placeholder="Insira seu CPF">
 
-    <button id="login">login</button>
-    <button id="Registrar-se">Registrar-se</button>
-    <link rel="stylesheet" href="/frontend/src/estilo.css">
-    <script src="frontend/js/script.js"></script>
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha" id="senha" placeholder="Insira sua senha">
+
+        <button id="btn-login">Login</button>
+        <button id="btn-registrar">Registrar-se</button>
+    </div>
+
+    <script src="/frontend/js/script.js"></script>
 </body> 
 </html>
