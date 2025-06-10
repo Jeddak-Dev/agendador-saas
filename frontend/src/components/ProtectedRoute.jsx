@@ -1,14 +1,27 @@
-import { Navigate } from "react-router-dom";
-import { auth } from "../auth";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { getAccessToken, getUserRole } from '../auth';
 
-const ProtectedRoute = ({ children, role }) => {
-  const user = auth.getUser();
+const ProtectedRoute = ({ allowedRoles }) => {
+    const isAuthenticated = !!getAccessToken();
+    const userRole = getUserRole();
 
-  if (!auth.isAuthenticated()) return <Navigate to="/login" />;
+    if (!isAuthenticated) {
+        // Se não estiver autenticado, redireciona para a página de login
+        return <Navigate to="/login" replace />;
+    }
 
-  if (role && user.role !== role) return <Navigate to="/" />;
+    if (allowedRoles && !allowedRoles.includes(userRole)) {
+        // Se o usuário não tiver a role permitida, redireciona para o dashboard apropriado ou home
+        if (userRole === 'client') {
+            return <Navigate to="/client" replace />;
+        } else if (userRole === 'admin' || userRole === 'owner') {
+            return <Navigate to="/admin" replace />;
+        }
+        return <Navigate to="/" replace />; // Fallback
+    }
 
-  return children;
+    return <Outlet />; // Renderiza as rotas filhas
 };
 
 export default ProtectedRoute;
