@@ -6,6 +6,7 @@ import DashboardClient from "./pages/DashboardClient";
 import AdminLayout from "./layouts/AdminLayout";
 import ClientLayout from "./layouts/ClientLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
 
 export default function App() {
   return (
@@ -29,7 +30,7 @@ export default function App() {
         <Route path="dashboard" element={<DashboardClient />} />
       </Route>
 
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Home />} />
     </Routes>
   );
 }
