@@ -1,0 +1,32 @@
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.utils import timezone
+from .models import Notification
+from serializers import NotificationSerializer
+from rest_framework.permissions import IsAuthenticated
+import logging
+
+logger = logging.getLogger(__name__)
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):  # Apenas leitura e marcação como lida
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+
+    @action(detail=True, methods=['post'], url_path='mark-as-read')
+    def mark_as_read(self, request, pk=None):
+        try:
+            notification = self.get_object()
+            if notification.user != request.user:
+                return Response({"detail": "Você não tem permissão para acessar esta notificação."}, status=status.HTTP_403_FORBIDDEN)
+
+            notification.is_read = True
+            notification.save()
+            return Response(NotificationSerializer(notification).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Erro ao marcar notificação como lida: {e}")
+            return Response({"detail": "Erro ao processar a solicitação."}, status=status.HTTP_400_BAD_REQUEST)
