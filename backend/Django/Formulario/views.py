@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
@@ -416,18 +416,18 @@ def mercadopago_webhook(request):
             if payment_info and payment_info['response']['status_code'] == 200:
                 mp_payment = payment_info['response']
                 status_mp = mp_payment['status']
-                external_reference = mp_payment.get('external_reference') # Nosso appointment ID
+                external_reference = mp_payment.get('external_reference')  # Nosso appointment ID
 
                 try:
                     appointment = Appointment.objects.get(id=external_reference)
                 except Appointment.DoesNotExist:
                     logger.warning(f"Webhook: Agendamento com external_reference {external_reference} não encontrado.")
-                    return Response(status=status.HTTP_200_OK) # Retorna OK para MP
+                    return Response(status=status.HTTP_200_OK)  # Retorna OK para MP
 
                 # Mapeamento de status do Mercado Pago para o seu sistema
                 if status_mp == 'approved':
                     appointment.payment_status = 'PAID'
-                    appointment.status = 'CONFIRMED' # Confirma o agendamento
+                    appointment.status = 'CONFIRMED'
                     Notification.objects.create(
                         user=appointment.client,
                         message=f"Seu pagamento para o agendamento de {appointment.service.name} foi aprovado! Seu agendamento está confirmado.",
@@ -438,13 +438,13 @@ def mercadopago_webhook(request):
                     appointment.status = 'PENDING_PAYMENT'
                 elif status_mp == 'refunded':
                     appointment.payment_status = 'REFUNDED'
-                    appointment.status = 'CANCELED' # Agendamento cancelado por estorno
+                    appointment.status = 'CANCELED'
                 elif status_mp == 'cancelled':
                     appointment.payment_status = 'CANCELLED'
                     appointment.status = 'CANCELED'
                 elif status_mp == 'rejected':
                     appointment.payment_status = 'REJECTED'
-                    appointment.status = 'PENDING_PAYMENT' # Ou outro status adequado
+                    appointment.status = 'PENDING_PAYMENT'
                     Notification.objects.create(
                         user=appointment.client,
                         message=f"Seu pagamento para o agendamento de {appointment.service.name} foi rejeitado. Por favor, tente novamente.",
@@ -470,11 +470,14 @@ def mercadopago_webhook(request):
             else:
                 logger.error(f"Erro ao consultar pagamento no Mercado Pago: {payment_info}")
                 return Response({"detail": "Erro ao consultar pagamento no Mercado Pago."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Outros tópicos podem ser tratados aqui (e.g., merchant_order)
+
+        # Outros tópicos podem ser tratados aqui
         logger.info(f"Webhook recebido: Tópico={topic}, Dados={data}")
         return Response(status=status.HTTP_200_OK)
 
+    except Exception as e:
+        logger.exception(f"Erro inesperado no webhook do Mercado Pago: {e}")
+        return Response({"detail": "Erro interno no processamento do webhook."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class NotificationViewSet(viewsets.ReadOnlyModelViewSet): # Apenas leitura e marcação como lida
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -492,3 +495,26 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet): # Apenas leitura e mar
         notification.is_read = True
         notification.save()
         return Response(NotificationSerializer(notification).data, status=status.HTTP_200_OK)
+    logger = logging.getLogger(__name__)
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):  # Apenas leitura e marcação como lida
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+
+    @action(detail=True, methods=['post'], url_path='mark-as-read')
+    def mark_as_read(self, request, pk=None):
+        try:
+            notification = self.get_object()
+            if notification.user != request.user:
+                return Response({"detail": "Você não tem permissão para acessar esta notificação."}, status=status.HTTP_403_FORBIDDEN)
+
+            notification.is_read = True
+            notification.save()
+            return Response(NotificationSerializer(notification).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Erro ao marcar notificação como lida: {e}")
+            return Response({"detail": "Erro ao processar a solicitação."}, status=status.HTTP_400_BAD_REQUEST)

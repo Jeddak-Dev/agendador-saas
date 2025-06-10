@@ -8,29 +8,28 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardClient from './pages/DashboardClient';
-import DashboardAdmin from './pages/DashboardAdmin';
-// ... outras páginas como Agendamento, Detalhes do Estabelecimento, etc.
+import DashboardAdmin from './pages\DashboardAdmin';
 
 // Layouts
 import ClientLayout from './layouts/ClientLayout';
 import AdminLayout from './layouts/AdminLayout';
 
 // Componentes
-import ProtectedRoute from './components/ProtectedRoute'; // Importe seu ProtectedRoute
-import { getUserRole } from './auth'; // Importe a função para obter o papel do usuário
+import ProtectedRoute from './components/ProtectedRoute';
+import { getUserRole } from './auth';
 
 function App() {
-    const userRole = getUserRole(); // Obtém o papel do usuário do token JWT
+    const userRole = getUserRole();
 
     return (
         <Router>
-            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+            <ToastContainer position="top-right" autoClose={5000} />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                {/* Rotas Protegidas para Clientes */}
+                {/* Rotas protegidas para clientes */}
                 <Route
                     path="/client/*"
                     element={
@@ -40,12 +39,10 @@ function App() {
                     }
                 >
                     <Route index element={<DashboardClient />} />
-                    {/* Exemplo: Rota para ver agendamentos específicos do cliente */}
-                    {/* <Route path="appointments" element={<ClientAppointmentsPage />} /> */}
-                    {/* <Route path="profile" element={<ClientProfilePage />} /> */}
+                    {/* Outras rotas do cliente */}
                 </Route>
 
-                {/* Rotas Protegidas para Admins/Owners */}
+                {/* Rotas protegidas para admin/owner */}
                 <Route
                     path="/admin/*"
                     element={
@@ -55,19 +52,14 @@ function App() {
                     }
                 >
                     <Route index element={<DashboardAdmin />} />
-                    {/* Exemplo: Rotas para gerenciar serviços, profissionais, etc. */}
-                    {/* <Route path="establishments" element={<EstablishmentManagement />} /> */}
-                    {/* <Route path="services" element={<ServiceManagement />} /> */}
-                    {/* <Route path="professionals" element={<ProfessionalManagement />} /> */}
-                    {/* <Route path="appointments" element={<AdminAppointmentsManagement />} /> */}
-                    {/* <Route path="reports" element={<ReportsPage />} /> */}
+                    {/* Outras rotas do admin */}
                 </Route>
 
-                {/* Redirecionamento baseado no papel do usuário após login */}
+                {/* Redirecionamento pós-login */}
                 {userRole === 'client' && <Route path="/dashboard" element={<Navigate to="/client" replace />} />}
                 {(userRole === 'admin' || userRole === 'owner') && <Route path="/dashboard" element={<Navigate to="/admin" replace />} />}
-                
-                {/* Rota padrão para 404 - Not Found */}
+
+                {/* 404 */}
                 <Route path="*" element={<div>404 - Página Não Encontrada</div>} />
             </Routes>
         </Router>
