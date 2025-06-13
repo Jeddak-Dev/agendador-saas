@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardClient from './pages/DashboardClient';
-import DashboardAdmin from './pages\DashboardAdmin';
+import DashboardAdmin from './pages/DashboardAdmin';
 
 // Layouts
 import ClientLayout from './layouts/ClientLayout';
