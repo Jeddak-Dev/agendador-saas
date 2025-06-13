@@ -14,11 +14,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.9.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.2",
-    "react-toastify": "^11.0.5"
+    "react-router-dom": "^6.x.x",
+    "axios": "^1.x.x",
+    "react-toastify": "^9.x.x"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.5.2",
