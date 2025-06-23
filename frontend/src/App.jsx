@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// Remova a importação do BrowserRouter aqui, pois já está em main.jsx
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +23,8 @@ function App() {
     const userRole = getUserRole();
 
     return (
-        <Router>
+        // Remova o componente <Router> que envolvia as <Routes>
+        <> {/* Use um Fragment React vazio (<> </>) ou um <div> se precisar de um elemento pai */}
             <ToastContainer position="top-right" autoClose={5000} />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -62,7 +64,7 @@ function App() {
                 {/* 404 */}
                 <Route path="*" element={<div>404 - Página Não Encontrada</div>} />
             </Routes>
-        </Router>
+        </>
     );
 }
 
