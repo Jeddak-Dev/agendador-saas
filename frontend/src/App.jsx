@@ -1,5 +1,4 @@
 import React from 'react';
-// Remova a importação do BrowserRouter aqui, pois já está em main.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardClient from './pages/DashboardClient';
 import DashboardAdmin from './pages/DashboardAdmin';
+import SchedulingPage from './pages/SchedulingPage'; // <-- Importa a nova página
 
 // Layouts
 import ClientLayout from './layouts/ClientLayout';
@@ -23,13 +23,14 @@ function App() {
     const userRole = getUserRole();
 
     return (
-        // Remova o componente <Router> que envolvia as <Routes>
-        <> {/* Use um Fragment React vazio (<> </>) ou um <div> se precisar de um elemento pai */}
+        <>
             <ToastContainer position="top-right" autoClose={5000} />
             <Routes>
+                {/* Rotas Públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/agendamento" element={<SchedulingPage />} /> {/* <-- Nova Rota Adicionada */}
 
                 {/* Rotas protegidas para clientes */}
                 <Route
@@ -41,7 +42,9 @@ function App() {
                     }
                 >
                     <Route index element={<DashboardClient />} />
-                    {/* Outras rotas do cliente */}
+                    {/* Outras rotas aninhadas do cliente podem ser adicionadas aqui. Ex:
+                    <Route path="meus-agendamentos" element={<ClientAppointments />} />
+                    */}
                 </Route>
 
                 {/* Rotas protegidas para admin/owner */}
@@ -54,7 +57,9 @@ function App() {
                     }
                 >
                     <Route index element={<DashboardAdmin />} />
-                    {/* Outras rotas do admin */}
+                     {/* Outras rotas aninhadas do admin podem ser adicionadas aqui. Ex:
+                    <Route path="gerenciar-horarios" element={<ManageSchedules />} />
+                    */}
                 </Route>
 
                 {/* Redirecionamento pós-login */}
